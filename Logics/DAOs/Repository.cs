@@ -25,7 +25,7 @@ namespace TpWeb.Logics.DAOs
         /// </summary>
         protected Repository()
         {
-            connexion = new SqlConnection("Server = 172.16.201.252; Database = Cegep2; User Id=Samy;Password=Patate123456;");
+            connexion = new SqlConnection("Server = localhost; Database = Cegep2; User Id=Samy;Password=Patate123456;");
         }
 
         #endregion Constructeurs

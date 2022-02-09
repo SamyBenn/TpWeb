@@ -1,0 +1,49 @@
+﻿@using TpWeb.Models
+@*Si erreur du côté serveur... affichage du message d'erreur...*@
+@if (ViewBag.MessageErreur != null)
+{
+    <br>
+    <h2 class="alert-danger">@ViewBag.MessageErreur</h2>
+}
+else
+{
+    <h3>Selectionnez un Cégep</h3>
+
+    <form asp-controller="Departement" asp-action="" method="get">
+        <select name="cegep" id="cegep" onchange="submit();">
+
+            @foreach(CegepDTO cegep in ViewBag.ListeCegeps)
+            {
+                if(ViewBag.Cegep.Nom.Equals(@cegep.Nom))
+                {
+                    <option value=@cegep.Nom selected>@cegep.Nom</option>
+                }
+                else
+                {
+                    <option value=@cegep.Nom>@cegep.Nom</option>
+                }
+            }
+        </select>
+    </form>
+
+    @*Affichage de la liste des dep...*@
+    <br>
+    <h3>Liste des département(s) (@ViewBag.ListeDepartements.Length Departement(s)) :</h3>
+    <br>
+       
+    <table>
+        <tbody><tr>
+            <th>No</th>
+            <th>Nom</th>
+            <th>Description</th>
+        </tr>@foreach (DepartementDTO departement in ViewBag.ListeDepartements)
+        {<tr>
+                <td>@departement.No</td>
+                <td>@departement.Nom</td>
+                <td>@departement.Description</td>
+            </tr> }
+        </tbody>
+     </table>
+}
+
+
