@@ -6,8 +6,8 @@
 }
 else
 {
-
-    <form asp-controller="Enseignant" asp-action="" method="get">
+    int v = 0;
+    <form asp-controller="Enseignant" asp-action="Index" method="get">
 
         <h3>Selectionnez un Cégep</h3>
 
@@ -26,6 +26,7 @@ else
             }
         </select>
 
+
         <h3>Selectionnez un Departement</h3>
 
         <select name="departement" id="departement" onchange="submit();">
@@ -41,13 +42,9 @@ else
                     {
                         <option value=@departement.Nom>@departement.Nom</option>
                     }
-
-
             }
         </select>
     </form>
-
-
 
     <br>
     <h3>Liste des Enseignant(s) (@ViewBag.ListeEnseignant.Length Enseignant(s)) :</h3>
@@ -63,7 +60,7 @@ else
                 <td>@enseignant.NoEmploye</td>
                 <td>@enseignant.Nom</td>
                 <td>@enseignant.Prenom</td>
-            </tr> }
+        </tr> }
         </tbody>
      </table>
 }

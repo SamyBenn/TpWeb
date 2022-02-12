@@ -6,7 +6,6 @@ namespace TpWeb.Controllers
 {
     public class DepartementController : Controller
     {
-        //[Route("")]
         [Route("Departement")]
         [Route("Departement/Index")]
         [HttpGet]
@@ -19,7 +18,6 @@ namespace TpWeb.Controllers
                 {
                     cegep = CegepControleur.Instance.ObtenirListeCegep()[0].Nom;
                 }
-                //string nomCegep = "Cégep de Rivière-du-Loup";
                 ViewBag.Cegep = CegepControleur.Instance.ObtenirCegep(cegep);
                 ViewBag.ListeDepartements = CegepControleur.Instance.ObtenirListeDepartement(cegep).ToArray();
             }

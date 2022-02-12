@@ -6,7 +6,6 @@ namespace TpWeb.Controllers
 {
     public class EnseignantController : Controller
     {
-        //[Route("")]
         [Route("Enseignant")]
         [Route("Enseignant/Index")]
         [HttpGet]
@@ -14,7 +13,6 @@ namespace TpWeb.Controllers
         {
             try
             {
-
                 ViewBag.ListeCegeps = CegepControleur.Instance.ObtenirListeCegep().ToArray();
                 if (cegep is null)
                 {
@@ -27,7 +25,6 @@ namespace TpWeb.Controllers
                     departement = CegepControleur.Instance.ObtenirListeDepartement(cegep)[0].Nom;
                 }
                 ViewBag.Departement = CegepControleur.Instance.ObtenirDepartement(cegep, departement);
-
                 ViewBag.ListeEnseignant = CegepControleur.Instance.ObtenirListeEnseignant(cegep, departement).ToArray();
             }
             catch (Exception e)
