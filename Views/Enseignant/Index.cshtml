@@ -1,0 +1,66 @@
+﻿@using TpWeb.Models
+@if (ViewBag.MessageErreur != null)
+{
+    <br>
+    <h2 class="alert-danger">@ViewBag.MessageErreur</h2>
+}
+else
+{
+    int v = 0;
+    <form asp-controller="Enseignant" asp-action="Index" method="get">
+
+        <h3>Selectionnez un Cégep</h3>
+
+        <select name="cegep" id="cegep" onchange="submit();">
+
+            @foreach(CegepDTO cegep in ViewBag.ListeCegeps)
+            {
+                if(ViewBag.Cegep.Nom.Equals(@cegep.Nom))
+                {
+                    <option value=@cegep.Nom selected>@cegep.Nom</option>
+                }
+                else
+                {
+                    <option value=@cegep.Nom>@cegep.Nom</option>
+                }
+            }
+        </select>
+
+
+        <h3>Selectionnez un Departement</h3>
+
+        <select name="departement" id="departement" onchange="submit();">
+
+            @foreach(DepartementDTO departement in ViewBag.ListeDepartements)
+            {
+
+                    if(ViewBag.Departement.Nom.Equals(@departement.Nom))
+                    {
+                        <option value=@departement.Nom selected>@departement.Nom</option>
+                    }
+                    else
+                    {
+                        <option value=@departement.Nom>@departement.Nom</option>
+                    }
+            }
+        </select>
+    </form>
+
+    <br>
+    <h3>Liste des Enseignant(s) (@ViewBag.ListeEnseignant.Length Enseignant(s)) :</h3>
+    <br>
+
+    <table>
+        <tbody><tr>
+            <th>No employe</th>
+            <th>Nom</th>
+            <th>Prenom</th>
+        </tr>@foreach (EnseignantDTO enseignant in ViewBag.ListeEnseignant)
+        {<tr>
+                <td>@enseignant.NoEmploye</td>
+                <td>@enseignant.Nom</td>
+                <td>@enseignant.Prenom</td>
+        </tr> }
+        </tbody>
+     </table>
+}

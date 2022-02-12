@@ -4,12 +4,12 @@ using TpWeb.Logics.Controleurs;
 
 namespace TpWeb.Controllers
 {
-    public class DepartementController : Controller
+    public class EnseignantController : Controller
     {
-        [Route("Departement")]
-        [Route("Departement/Index")]
+        [Route("Enseignant")]
+        [Route("Enseignant/Index")]
         [HttpGet]
-        public IActionResult Index([FromQuery] string cegep)
+        public IActionResult Index([FromQuery] string cegep, string departement)
         {
             try
             {
@@ -20,6 +20,12 @@ namespace TpWeb.Controllers
                 }
                 ViewBag.Cegep = CegepControleur.Instance.ObtenirCegep(cegep);
                 ViewBag.ListeDepartements = CegepControleur.Instance.ObtenirListeDepartement(cegep).ToArray();
+                if (departement is null)
+                {
+                    departement = CegepControleur.Instance.ObtenirListeDepartement(cegep)[0].Nom;
+                }
+                ViewBag.Departement = CegepControleur.Instance.ObtenirDepartement(cegep, departement);
+                ViewBag.ListeEnseignant = CegepControleur.Instance.ObtenirListeEnseignant(cegep, departement).ToArray();
             }
             catch (Exception e)
             {
