@@ -6,7 +6,7 @@
 }
 else
 {
-    <form asp-controller="Enseignant" asp-action="Index" method="get">
+    <form asp-controller="Cours" asp-action="Index" method="get">
 
         <h3>Selectionnez un Cégep</h3>
 
@@ -26,7 +26,7 @@ else
         </select>
     </form>
 
-    <form asp-controller="Enseignant" asp-action="Index" method="get">
+    <form asp-controller="Cours" asp-action="Index" method="get">
 
         <input type="hidden" name="cegep" value="@ViewBag.cegep">
 
@@ -50,19 +50,19 @@ else
     </form>
 
     <br>
-    <h3>Liste des Enseignant(s) (@ViewBag.ListeEnseignant.Length Enseignant(s)) :</h3>
+    <h3>Liste des Cour(s) (@ViewBag.ListeCours.Length Cour(s)) :</h3>
     <br>
 
     <table>
         <tbody><tr>
-            <th>No employe</th>
+            <th>No</th>
             <th>Nom</th>
-            <th>Prenom</th>
-        </tr>@foreach (EnseignantDTO enseignant in ViewBag.ListeEnseignant)
+            <th>Description</th>
+        </tr>@foreach (CoursDTO cours in ViewBag.ListeCours)
         {<tr>
-                <td>@enseignant.NoEmploye</td>
-                <td>@enseignant.Nom</td>
-                <td>@enseignant.Prenom</td>
+                <td>@cours.No</td>
+                <td>@cours.Nom</td>
+                <td>@cours.Description</td>
         </tr> }
         </tbody>
      </table>
