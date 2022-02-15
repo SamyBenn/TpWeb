@@ -20,6 +20,7 @@ namespace TpWeb.Controllers
                 }
                 ViewBag.Cegep = CegepControleur.Instance.ObtenirCegep(cegep);
                 ViewBag.ListeDepartements = CegepControleur.Instance.ObtenirListeDepartement(cegep).ToArray();
+                ViewBag.cegep = cegep;
                 if (departement is null)
                 {
                     departement = CegepControleur.Instance.ObtenirListeDepartement(cegep)[0].Nom;

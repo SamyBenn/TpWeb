@@ -6,16 +6,16 @@
 }
 else
 {
-    int v = 0;
     <form asp-controller="Enseignant" asp-action="Index" method="get">
 
         <h3>Selectionnez un Cégep</h3>
 
+        \
         <select name="cegep" id="cegep" onchange="submit();">
 
             @foreach(CegepDTO cegep in ViewBag.ListeCegeps)
             {
-                if(ViewBag.Cegep.Nom.Equals(@cegep.Nom))
+                if(ViewBag.cegep == @cegep.Nom)
                 {
                     <option value=@cegep.Nom selected>@cegep.Nom</option>
                 }
@@ -25,7 +25,11 @@ else
                 }
             }
         </select>
+    </form>
 
+    <form asp-controller="Enseignant" asp-action="Index" method="get">
+
+        <input type="hidden" name="cegep" value="@ViewBag.cegep">
 
         <h3>Selectionnez un Departement</h3>
 
