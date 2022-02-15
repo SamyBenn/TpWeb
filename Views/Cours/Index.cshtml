@@ -1,4 +1,5 @@
 ﻿@using TpWeb.Models
+@model CoursDTO;
 @if (ViewBag.MessageErreur != null)
 {
     <br>
@@ -14,7 +15,7 @@ else
 
             @foreach(CegepDTO cegep in ViewBag.ListeCegeps)
             {
-                if(ViewBag.cegep == @cegep.Nom)
+                if(ViewBag.nomCegep == @cegep.Nom)
                 {
                     <option value=@cegep.Nom selected>@cegep.Nom</option>
                 }
@@ -28,7 +29,7 @@ else
 
     <form asp-controller="Cours" asp-action="Index" method="get">
 
-        <input type="hidden" name="cegep" value="@ViewBag.cegep">
+        <input type="hidden" name="cegep" value="@ViewBag.nomCegep">
 
         <h3>Selectionnez un Departement</h3>
 
@@ -37,7 +38,7 @@ else
             @foreach(DepartementDTO departement in ViewBag.ListeDepartements)
             {
 
-                    if(ViewBag.Departement.Nom.Equals(@departement.Nom))
+                    if(ViewBag.nomDepartement == @departement.Nom)
                     {
                         <option value=@departement.Nom selected>@departement.Nom</option>
                     }
@@ -66,4 +67,28 @@ else
         </tr> }
         </tbody>
      </table>
+
+     <br />
+    <h3>Ajouter un Cours</h3>
+    <br />
+
+     <form asp-controller="Cours" asp-action="AjouterCours" method="post">
+         <input type="hidden" name="nomCegep" value="@ViewBag.nomCegep"/>
+         <input type="hidden" name="nomDepartement" value="@ViewBag.nomDepartement"/>
+        <table>
+            <tbody><tr>
+                <td><label asp-for="No"></label></td>
+                <td> <input asp-for="No">  </td>
+            </tr>
+            <tr>
+                <td> <label asp-for="Nom"></label></td>
+                <td>  <input asp-for="Nom"> </td>
+            </tr>
+            <tr>
+                <td> <label asp-for="Description"></label></td>
+                <td> <input asp-for="Description"> </td>
+            </tr>
+        </tbody></table>
+        <input type="submit" value="Ajouter">
+    </form>
 }

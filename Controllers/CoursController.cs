@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Routing;
 using System;
 using TpWeb.Logics.Controleurs;
+using TpWeb.Models;
 
 namespace TpWeb.Controllers
 {
@@ -19,14 +20,14 @@ namespace TpWeb.Controllers
                 {
                     cegep = CegepControleur.Instance.ObtenirListeCegep()[0].Nom;
                 }
-                ViewBag.Cegep = CegepControleur.Instance.ObtenirCegep(cegep);
+                ViewBag.nomCegep = cegep;
                 ViewBag.ListeDepartements = CegepControleur.Instance.ObtenirListeDepartement(cegep).ToArray();
-                ViewBag.cegep = cegep;
+                
                 if (departement is null)
                 {
                     departement = CegepControleur.Instance.ObtenirListeDepartement(cegep)[0].Nom;
                 }
-                ViewBag.Departement = CegepControleur.Instance.ObtenirDepartement(cegep, departement);
+                ViewBag.nomDepartement = departement;
                 ViewBag.ListeCours = CegepControleur.Instance.ObtenirListeCours(cegep, departement).ToArray();
 
             }
@@ -35,6 +36,21 @@ namespace TpWeb.Controllers
                 ViewBag.MessageErreur = e.Message;
             }
             return View();
+        }
+
+        [Route("Cours/AjouterCours")]
+        [HttpPost]
+        public IActionResult AjouterCours([FromForm]string nomCegep, [FromForm]string nomDepartement, [FromForm]CoursDTO cours)
+        {
+            try
+            {
+                CegepControleur.Instance.AjouterCours(nomCegep, nomDepartement, cours);
+            }
+            catch (Exception e)
+            {
+                ViewBag.MessageErreur = e.Message;
+            }
+            return RedirectToAction("Index", "Cours", new { cegep = nomCegep, departement = nomDepartement });
         }
     }
 }

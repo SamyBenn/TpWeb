@@ -39,6 +39,13 @@ namespace TpWeb.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Méthode de service appelé lors de l'action Ajouter.
+        /// Rôles de l'action : 
+        ///   -Ajouter un Cégep.
+        /// </summary>
+        /// <param name="cegep">le cegep a ajouter</param>
+        /// <returns>ActionResult suite aux traitements des données.</returns>
         [Route("Cegep/AjouterCegep")]
         [HttpPost]
         public IActionResult AjouterCegep([FromForm] CegepDTO cegep)

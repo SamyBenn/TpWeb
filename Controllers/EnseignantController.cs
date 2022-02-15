@@ -26,7 +26,7 @@ namespace TpWeb.Controllers
                 {
                     departement = CegepControleur.Instance.ObtenirListeDepartement(cegep)[0].Nom;
                 }
-                ViewBag.nomDepartement = CegepControleur.Instance.ObtenirDepartement(cegep, departement).Nom;
+                ViewBag.nomDepartement = departement;
                 ViewBag.ListeEnseignant = CegepControleur.Instance.ObtenirListeEnseignant(cegep, departement).ToArray();
             }
             catch (Exception e)
