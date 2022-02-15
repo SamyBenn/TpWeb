@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using TpWeb.Logics.Controleurs;
+using TpWeb.Models;
 
 namespace TpWeb.Controllers
 {
@@ -26,6 +27,21 @@ namespace TpWeb.Controllers
                 ViewBag.MessageErreur = e.Message;
             }
             return View();
+        }
+
+        [Route("Departement/AjouterDepartement")]
+        [HttpPost]
+        public IActionResult AjouterDepartement([FromForm]string nomCegep, [FromForm]DepartementDTO departement)
+        {
+            try
+            {
+                CegepControleur.Instance.AjouterDepartement(nomCegep, departement);
+            }
+            catch (Exception e)
+            {
+                ViewBag.MessageErreur = e.Message;
+            }
+            return RedirectToAction("Index", "Departement", new {cegep=nomCegep});
         }
     }
 }
