@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using TpWeb.Logics.Controleurs;
+using TpWeb.Models;
 
 /// <summary>
 /// Namespace pour les controleurs de vue.
@@ -36,6 +37,21 @@ namespace TpWeb.Controllers
 
             //Retour de la vue...
             return View();
+        }
+
+        [Route("Cegep/AjouterCegep")]
+        [HttpPost]
+        public IActionResult AjouterCegep([FromForm] CegepDTO cegep)
+        {
+            try
+            {
+               CegepControleur.Instance.AjouterCegep(cegep);
+            }
+            catch (Exception e)
+            {
+                ViewBag.MessageErreur = e.Message;
+            }
+            return RedirectToAction("Index", "Cegep");
         }
     }
 }
