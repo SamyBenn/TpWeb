@@ -60,5 +60,37 @@ namespace TpWeb.Controllers
             }
             return RedirectToAction("Index", "Cegep");
         }
+
+        [Route("Cegep/FormModifier")]
+        [HttpGet]
+        public IActionResult FormModifier([FromQuery] string nomCegep)
+        {
+            CegepDTO cegep = new CegepDTO();
+            try
+            {
+                cegep = CegepControleur.Instance.ObtenirCegep(nomCegep);
+                ViewBag.cegep = cegep;
+            }
+            catch (Exception e)
+            {
+                ViewBag.MessageErreur = e.Message;
+            }
+            return View(cegep);
+        }
+
+        [Route("Cegep/ModifierCegep")]
+        [HttpPost]
+        public  IActionResult ModifierCegep([FromForm] CegepDTO cegep)
+        {
+            try
+            {
+                CegepControleur.Instance.ModifierCegep(cegep);
+            }
+            catch (Exception e)
+            {
+                ViewBag.MessageErreur = e.Message;
+            }
+            return RedirectToAction("Index");
+        }
     }
 }
