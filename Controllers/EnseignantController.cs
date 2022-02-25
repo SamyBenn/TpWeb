@@ -7,6 +7,14 @@ namespace TpWeb.Controllers
 {
     public class EnseignantController : Controller
     {
+        /// <summary>
+        /// Méthode de service appelé lors de l'action Index.
+        /// Rôles de l'action : 
+        ///  -Afficher la liste des Enseignant.
+        /// </summary>
+        /// <param name="nomCegep">le nom du Cegep selectionne</param>
+        /// <param name="nomDepartement">le nom du Departement selectionne</param>
+        /// <returns></returns>
         [Route("Enseignant")]
         [Route("Enseignant/Index")]
         [HttpGet]
@@ -36,9 +44,19 @@ namespace TpWeb.Controllers
             return View();
         }
 
+
+        /// <summary>
+        /// Méthode de service appelé lors de l'action Ajouter.
+        /// Rôles de l'action : 
+        ///  -Ajouter un Enseignant a la BD.
+        /// </summary>
+        /// <param name="nomCegep">le nom du cegep ou ajouter</param>
+        /// <param name="nomDepartement">le nom du Departement ou ajouter</param>
+        /// <param name="enseignant">l'enseignant a ajouter</param>
+        /// <returns></returns>
         [Route("Enseignant/AjouterEnseignant")]
         [HttpPost]
-        public ActionResult AjouterEnseignant([FromForm]string nomCegep, [FromForm]string nomDepartement, [FromForm]EnseignantDTO enseignant)
+        public ActionResult AjouterEnseignant([FromForm]string nomCegep, string nomDepartement, EnseignantDTO enseignant)
         {
             try
             {
@@ -52,6 +70,15 @@ namespace TpWeb.Controllers
         }
 
 
+        /// <summary>
+        /// Méthode de service appelé lors de l'action modifier.
+        /// Rôles de l'action : 
+        ///  -Lancer le formulaire Modifier
+        /// </summary>
+        /// <param name="nomCegep">le nom du cegep ou modifier</param>
+        /// <param name="nomDepartement">le nom du departement ou modifier</param>
+        /// <param name="noEnseignant">le nom de l'enseignant a modifier</param>
+        /// <returns></returns>
         [Route("Enseignant/FormModifier")]
         [HttpGet]
         public IActionResult FormModifier([FromQuery] string nomCegep, string nomDepartement, int noEnseignant)
@@ -71,6 +98,15 @@ namespace TpWeb.Controllers
         }
 
 
+        /// <summary>
+        /// Méthode de service appelé lors de l'action modifier.
+        /// Rôles de l'action : 
+        ///  -Modifier un Enseignant
+        /// </summary>
+        /// <param name="nomCegep">le nom du cegep ou modifier</param>
+        /// <param name="nomDepartement">le nom du departement ou modifier</param>
+        /// <param name="enseignant">l'enseignant a modifier</param>
+        /// <returns></returns>
         [Route("Enseignant/ModifierEnseignant")]
         [HttpPost]
         public IActionResult ModifierEnseignant([FromForm] string nomCegep, string nomDepartement, EnseignantDTO enseignant)

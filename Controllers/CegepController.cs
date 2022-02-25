@@ -16,7 +16,7 @@ namespace TpWeb.Controllers
         /// <summary>
         /// Méthode de service appelé lors de l'action Index.
         /// Rôles de l'action : 
-        ///   -Afficher la liste des Cégeps.
+        ///  -Afficher la liste des Cégeps.
         /// </summary>
         /// <returns>ActionResult suite aux traitements des données.</returns>
         [Route("")]
@@ -42,7 +42,7 @@ namespace TpWeb.Controllers
         /// <summary>
         /// Méthode de service appelé lors de l'action Ajouter.
         /// Rôles de l'action : 
-        ///   -Ajouter un Cégep.
+        ///  -Ajouter un Cégep a la BD.
         /// </summary>
         /// <param name="cegep">le cegep a ajouter</param>
         /// <returns>ActionResult suite aux traitements des données.</returns>
@@ -61,6 +61,14 @@ namespace TpWeb.Controllers
             return RedirectToAction("Index", "Cegep");
         }
 
+
+        /// <summary>
+        /// Méthode de service appelé lors de l'action modifier.
+        /// Rôles de l'action : 
+        ///  -Lancer le formulaire Modifier
+        /// </summary>
+        /// <param name="nomCegep">le nom du Cegep a modifier</param>
+        /// <returns></returns>
         [Route("Cegep/FormModifier")]
         [HttpGet]
         public IActionResult FormModifier([FromQuery] string nomCegep)
@@ -77,6 +85,14 @@ namespace TpWeb.Controllers
             return View(cegep);
         }
 
+
+        /// <summary>
+        /// Méthode de service appelé lors de l'action modifier.
+        /// Rôles de l'action : 
+        ///  -Modifier un Cegep
+        /// </summary>
+        /// <param name="cegep">le Cegep a modifier</param>
+        /// <returns></returns>
         [Route("Cegep/ModifierCegep")]
         [HttpPost]
         public  IActionResult ModifierCegep([FromForm] CegepDTO cegep)

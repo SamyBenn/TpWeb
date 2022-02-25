@@ -11,7 +11,7 @@ else
 
         <h3>Selectionnez un Cégep</h3>
 
-        <select name="cegep" id="cegep" onchange="submit();">
+        <select name="nomCegep" id="nomCegep" onchange="submit();">
 
             @foreach(CegepDTO cegep in ViewBag.ListeCegeps)
             {
@@ -29,11 +29,11 @@ else
 
     <form asp-controller="Cours" asp-action="Index" method="get">
 
-        <input type="hidden" name="cegep" value="@ViewBag.nomCegep">
+        <input type="hidden" name="nomCegep" value="@ViewBag.nomCegep">
 
         <h3>Selectionnez un Departement</h3>
 
-        <select name="departement" id="departement" onchange="submit();">
+        <select name="nomDepartement" id="nomDepartement" onchange="submit();">
 
             @foreach(DepartementDTO departement in ViewBag.ListeDepartements)
             {
@@ -54,25 +54,34 @@ else
     <h3>Liste des Cour(s) (@ViewBag.ListeCours.Length Cour(s)) :</h3>
     <br>
 
+    <form asp-area="" asp-controller="Cours" asp-action="" method="get">
+
     <table>
         <tbody><tr>
             <th>No</th>
             <th>Nom</th>
             <th>Description</th>
-        </tr>@foreach (CoursDTO cours in ViewBag.ListeCours)
+        </tr>
+        <input type="hidden" name="nomCegep" value="@ViewBag.nomCegep">
+        <input type="hidden" name="nomDepartement" value="@ViewBag.nomDepartement">
+        <input type="hidden" id="nomCours" name="nomCours">
+        @foreach (CoursDTO cours in ViewBag.ListeCours)
         {<tr>
                 <td>@cours.No</td>
                 <td>@cours.Nom</td>
                 <td>@cours.Description</td>
-        </tr> }
+                <td><input onclick="document.getElementById('nomCours').value = '@cours.Nom'; this.form.action='/Cours/FormModifier'; this.form.method='get'; submit();" type="button" value="Modifier"></td>
+           </tr> }
         </tbody>
      </table>
+
+     </form>
 
      <br />
     <h3>Ajouter un Cours</h3>
     <br />
 
-     <form asp-controller="Cours" asp-action="AjouterCours" method="post">
+    <form asp-controller="Cours" asp-action="AjouterCours" method="post">
          <input type="hidden" name="nomCegep" value="@ViewBag.nomCegep"/>
          <input type="hidden" name="nomDepartement" value="@ViewBag.nomDepartement"/>
         <table>

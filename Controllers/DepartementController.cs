@@ -7,6 +7,13 @@ namespace TpWeb.Controllers
 {
     public class DepartementController : Controller
     {
+        /// <summary>
+        /// Méthode de service appelé lors de l'action Index.
+        /// Rôles de l'action : 
+        ///  -Afficher la liste des Departement.
+        /// </summary>
+        /// <param name="nomCegep">le nom du Cegep selectionne</param>
+        /// <returns></returns>
         [Route("Departement")]
         [Route("Departement/Index")]
         [HttpGet]
@@ -29,9 +36,18 @@ namespace TpWeb.Controllers
             return View();
         }
 
+
+        /// <summary>
+        /// Méthode de service appelé lors de l'action Ajouter.
+        /// Rôles de l'action : 
+        ///  -Ajouter un Departement a la BD.
+        /// </summary>
+        /// <param name="nomCegep">le nom du cegep ou ajouter</param>
+        /// <param name="departement">le nom du departement a ajouter</param>
+        /// <returns></returns>
         [Route("Departement/AjouterDepartement")]
         [HttpPost]
-        public IActionResult AjouterDepartement([FromForm]string nomCegep, [FromForm]DepartementDTO departement)
+        public IActionResult AjouterDepartement([FromForm]string nomCegep, DepartementDTO departement)
         {
             try
             {
@@ -44,6 +60,15 @@ namespace TpWeb.Controllers
             return RedirectToAction("Index", "Departement", new {nomCegep=nomCegep});
         }
 
+
+        /// <summary>
+        /// Méthode de service appelé lors de l'action modifier.
+        /// Rôles de l'action : 
+        ///  -Lancer le formulaire Modifier
+        /// </summary>
+        /// <param name="nomCegep">le nom du cegep ou modifier</param>
+        /// <param name="nomDepartement">le nom Departement a modifier</param>
+        /// <returns></returns>
         [Route("Departement/FormModifier")]
         [HttpGet]
         public IActionResult FormModifier([FromQuery] string nomCegep, string nomDepartement)
@@ -61,6 +86,16 @@ namespace TpWeb.Controllers
             return View(departement);
         }
 
+
+
+        /// <summary>
+        /// Méthode de service appelé lors de l'action modifier.
+        /// Rôles de l'action : 
+        ///  -Modifier un Departement
+        /// </summary>
+        /// <param name="nomCegep">le nom du cegep ou ajouter</param>
+        /// <param name="departement">le Departement a modifier</param>
+        /// <returns></returns>
         [Route("Departement/ModifierDepartement")]
         [HttpPost]
         public IActionResult ModifierDepartement([FromForm] string nomCegep, DepartementDTO departement)
