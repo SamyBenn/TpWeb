@@ -11,11 +11,11 @@ else
     <h3>Selectionnez un Cégep</h3>
 
     <form asp-controller="Departement" asp-action="Index" method="get">
-        <select name="cegep" id="cegep" onchange="submit();">
+        <select name="nomCegep" id="nomCegep" onchange="submit();">
 
             @foreach(CegepDTO cegep in ViewBag.ListeCegeps)
             {
-                if(ViewBag.Cegep.Nom.Equals(@cegep.Nom))
+                if(ViewBag.nomCegep == @cegep.Nom)
                 {
                     <option value=@cegep.Nom selected>@cegep.Nom</option>
                 }
@@ -32,26 +32,34 @@ else
     <h3>Liste des département(s) (@ViewBag.ListeDepartements.Length Departement(s)) :</h3>
     <br>
        
+    <form asp-area="" asp-controller="Departement" asp-action="" method="get">
+
     <table>
         <tbody><tr>
             <th>No</th>
             <th>Nom</th>
             <th>Description</th>
-        </tr>@foreach (DepartementDTO departement in ViewBag.ListeDepartements)
+        </tr>
+        <input type="hidden" name="nomCegep" value="@ViewBag.nomCegep">
+        <input type="hidden" id="nomDepartement" name="nomDepartement">
+        @foreach (DepartementDTO departement in ViewBag.ListeDepartements)
         {<tr>
                 <td>@departement.No</td>
                 <td>@departement.Nom</td>
                 <td>@departement.Description</td>
+                <td><input onclick="document.getElementById('nomDepartement').value = '@departement.Nom'; this.form.action='/Departement/FormModifier'; this.form.method='get'; submit();" type="button" value="Modifier"></td>
             </tr> }
         </tbody>
      </table>
+
+     </form>
 
      <br />
     <h3>Ajouter un Departement</h3>
     <br />
 
-     <form asp-controller="Departement" asp-action="AjouterDepartement" method="post">
-         <input type="hidden" name="nomCegep" value="@ViewBag.Cegep.Nom"/>
+    <form asp-controller="Departement" asp-action="AjouterDepartement" method="post">
+         <input type="hidden" name="nomCegep" value="@ViewBag.nomCegep"/>
         <table>
             <tbody><tr>
                 <td><label asp-for="No"></label></td>

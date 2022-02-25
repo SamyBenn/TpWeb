@@ -11,7 +11,7 @@ else
 
         <h3>Selectionnez un Cégep</h3>
 
-        <select name="cegep" id="cegep" onchange="submit();">
+        <select name="nomCegep" id="nomCegep" onchange="submit();">
 
             @foreach(CegepDTO cegep in ViewBag.ListeCegeps)
             {
@@ -29,11 +29,11 @@ else
 
     <form asp-controller="Enseignant" asp-action="Index" method="get">
 
-        <input type="hidden" name="cegep" value="@ViewBag.nomCegep">
+        <input type="hidden" name="nomCegep" value="@ViewBag.nomCegep">
 
         <h3>Selectionnez un Departement</h3>
 
-        <select name="departement" id="departement" onchange="submit();">
+        <select name="nomDepartement" id="nomDepartement" onchange="submit();">
 
             @foreach(DepartementDTO departement in ViewBag.ListeDepartements)
             {
@@ -54,19 +54,28 @@ else
     <h3>Liste des Enseignant(s) (@ViewBag.ListeEnseignant.Length Enseignant(s)) :</h3>
     <br>
 
+    <form asp-area="" asp-controller="Enseignant" asp-action="" method="get">
+
     <table>
         <tbody><tr>
             <th>No employe</th>
             <th>Nom</th>
             <th>Prenom</th>
-        </tr>@foreach (EnseignantDTO enseignant in ViewBag.ListeEnseignant)
+        </tr>
+        <input type="hidden" name="nomCegep" value="@ViewBag.nomCegep">
+        <input type="hidden" name="nomDepartement" value="@ViewBag.nomDepartement">
+        <input type="hidden" id="noEnseignant" name="noEnseignant">
+        @foreach (EnseignantDTO enseignant in ViewBag.ListeEnseignant)
         {<tr>
                 <td>@enseignant.NoEmploye</td>
                 <td>@enseignant.Nom</td>
                 <td>@enseignant.Prenom</td>
+                <td><input onclick="document.getElementById('noEnseignant').value = '@enseignant.NoEmploye'; this.form.action='/Enseignant/FormModifier'; this.form.method='get'; submit();" type="button" value="Modifier"></td>
         </tr> }
         </tbody>
      </table>
+
+     </form>
 
     <br />
     <h3>Ajouter un Enseignant</h3>

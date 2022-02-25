@@ -69,7 +69,6 @@ namespace TpWeb.Controllers
             try
             {
                 cegep = CegepControleur.Instance.ObtenirCegep(nomCegep);
-                ViewBag.cegep = cegep;
             }
             catch (Exception e)
             {

@@ -10,24 +10,24 @@ namespace TpWeb.Controllers
         [Route("Enseignant")]
         [Route("Enseignant/Index")]
         [HttpGet]
-        public IActionResult Index([FromQuery] string cegep, string departement)
+        public IActionResult Index([FromQuery] string nomCegep, string nomDepartement)
         {
             try
             {
                 ViewBag.ListeCegeps = CegepControleur.Instance.ObtenirListeCegep().ToArray();
-                if (cegep is null)
+                if (nomCegep is null)
                 {
-                    cegep = CegepControleur.Instance.ObtenirListeCegep()[0].Nom;
+                    nomCegep = CegepControleur.Instance.ObtenirListeCegep()[0].Nom;
                 }
-                ViewBag.nomCegep = cegep;
-                ViewBag.ListeDepartements = CegepControleur.Instance.ObtenirListeDepartement(cegep).ToArray();
+                ViewBag.nomCegep = nomCegep;
+                ViewBag.ListeDepartements = CegepControleur.Instance.ObtenirListeDepartement(nomCegep).ToArray();
 
-                if (departement is null)
+                if (nomDepartement is null)
                 {
-                    departement = CegepControleur.Instance.ObtenirListeDepartement(cegep)[0].Nom;
+                    nomDepartement = CegepControleur.Instance.ObtenirListeDepartement(nomCegep)[0].Nom;
                 }
-                ViewBag.nomDepartement = departement;
-                ViewBag.ListeEnseignant = CegepControleur.Instance.ObtenirListeEnseignant(cegep, departement).ToArray();
+                ViewBag.nomDepartement = nomDepartement;
+                ViewBag.ListeEnseignant = CegepControleur.Instance.ObtenirListeEnseignant(nomCegep, nomDepartement).ToArray();
             }
             catch (Exception e)
             {
@@ -48,7 +48,42 @@ namespace TpWeb.Controllers
             {
                 ViewBag.MessageErreur = e.Message;
             }
-            return RedirectToAction("Index", "Enseignant", new { cegep = nomCegep, departement = nomDepartement });
+            return RedirectToAction("Index", "Enseignant", new { nomCegep = nomCegep, nomDepartement = nomDepartement });
+        }
+
+
+        [Route("Enseignant/FormModifier")]
+        [HttpGet]
+        public IActionResult FormModifier([FromQuery] string nomCegep, string nomDepartement, int noEnseignant)
+        {
+            EnseignantDTO enseignant = new EnseignantDTO(); ;
+            try
+            {
+                enseignant = CegepControleur.Instance.ObtenirEnseignant(nomCegep, nomDepartement, noEnseignant);
+                ViewBag.nomCegep = nomCegep;
+                ViewBag.nomDepartement = nomDepartement;
+            }
+            catch (Exception e)
+            {
+                ViewBag.MessageErreur = e.Message;
+            }
+            return View(enseignant);
+        }
+
+
+        [Route("Enseignant/ModifierEnseignant")]
+        [HttpPost]
+        public IActionResult ModifierEnseignant([FromForm] string nomCegep, string nomDepartement, EnseignantDTO enseignant)
+        {
+            try
+            {
+                CegepControleur.Instance.ModifierEnseignant(nomCegep, nomDepartement, enseignant);
+            }
+            catch (Exception e)
+            {
+                ViewBag.MessageErreur = e.Message;
+            }
+            return RedirectToAction("Index", "Enseignant", new { nomCegep = nomCegep, nomDepartement=nomDepartement });
         }
     }
 }
