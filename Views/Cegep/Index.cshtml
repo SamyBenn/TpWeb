@@ -13,7 +13,8 @@ else
     <h3>Liste des cégep(s) (@ViewBag.ListeCegeps.Length Cégep(s)) :</h3>
     <br>
     
-       
+    <form asp-area="" asp-controller="Cegep" asp-action="" method="get">
+    
     <table>
         <tbody>
             <tr>
@@ -25,6 +26,7 @@ else
                 <th>Téléphone</th>
                 <th>Courriel</th>
             </tr>
+            <input type="hidden" id="nomCegep" name="nomCegep">
             @foreach (CegepDTO cegep in ViewBag.ListeCegeps)
                 {<tr>
                     <td>@cegep.Nom</td>
@@ -34,9 +36,11 @@ else
                     <td>@cegep.CodePostal</td>
                     <td>@cegep.Telephone</td>
                     <td>@cegep.Courriel</td>
-                </tr> }
+                    <td><input onclick="document.getElementById('nomCegep').value = '@cegep.Nom'; this.form.action='/Cegep/FormModifier'; this.form.method='get'; submit();" type="button" value="Modifier"></td>
+                </tr>}
         </tbody>
     </table>
+    </form>
 
     <br />
     <h3>Ajouter un Cegep</h3>

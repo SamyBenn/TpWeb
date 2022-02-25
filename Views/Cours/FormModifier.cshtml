@@ -1,0 +1,34 @@
+﻿@using TpWeb.Models
+@model CoursDTO;
+@*Si erreur du côté serveur... affichage du message d'erreur...*@
+@if (ViewBag.MessageErreur != null)
+{
+    <br>
+    <h2 class="alert-danger">@ViewBag.MessageErreur</h2>
+}
+else
+{
+    <h3>Modifier un Cours</h3>
+    <br />
+
+    <form asp-controller="Cours" asp-action="ModifierCours" method="post">
+             <input type="hidden" name="nomCegep" value="@ViewBag.nomCegep"/>
+             <input type="hidden" name="nomDepartement" value="@ViewBag.nomDepartement"/>
+            <table>
+                <tbody><tr>
+                    <td><label asp-for="No"></label></td>
+                    <td> <input asp-for="No">  </td>
+                </tr>
+                <tr>
+                    <td> <label asp-for="Nom"></label></td>
+                    <td>  <input asp-for="Nom" readonly> </td>
+                </tr>
+                <tr>
+                    <td> <label asp-for="Description"></label></td>
+                    <td> <input asp-for="Description"> </td>
+                </tr>
+            </tbody></table>
+            <input type="submit" value="Modifier">
+            <input type="button" value="Annuler" onclick="history.back();" />
+        </form>
+    }
