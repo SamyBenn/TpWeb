@@ -68,7 +68,7 @@ namespace TpWeb.Controllers
             {
                 ViewBag.MessageErreur = e.Message;
             }
-            return RedirectToAction("Index", "Cours", new { cegep = nomCegep, departement = nomDepartement });
+            return RedirectToAction("Index", "Cours", new { nomCegep = nomCegep, nomDepartement = nomDepartement });
         }
 
 
