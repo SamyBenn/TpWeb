@@ -54,14 +54,27 @@ else
     <h3>Liste des Cour(s) (@ViewBag.ListeCours.Length Cour(s)) :</h3>
     <br>
 
-    <form asp-area="" asp-controller="Cours" asp-action="" method="get">
-
-    <table>
-        <tbody><tr>
+    <form asp-area="" asp-controller="Cours" asp-action="ViderListeCours" method="post">
+        <input type="hidden" name="nomCegep" value="@ViewBag.nomCegep">
+        <input type="hidden" name="nomDepartement" value="@ViewBag.nomDepartement">
+        <tr>
             <th>No</th>
             <th>Nom</th>
             <th>Description</th>
         </tr>
+        <input id="vidation" onclick="if(confirm('Voulez vous?')){submit();}" type="button" value="Vider liste Cours">
+    </form>
+
+    <script>
+        if(@ViewBag.ListeCours.Length==0){
+            document.getElementById('vidation').style.display = "none";
+        }
+    </script>
+
+    <form asp-area="" asp-controller="Cours" asp-action="" method="get">
+
+    <table>
+        <tbody>
         <input type="hidden" name="nomCegep" value="@ViewBag.nomCegep">
         <input type="hidden" name="nomDepartement" value="@ViewBag.nomDepartement">
         <input type="hidden" id="nomCours" name="nomCours">
@@ -71,11 +84,13 @@ else
                 <td>@cours.Nom</td>
                 <td>@cours.Description</td>
                 <td><input onclick="document.getElementById('nomCours').value = '@cours.Nom'; this.form.action='/Cours/FormModifier'; this.form.method='get'; submit();" type="button" value="Modifier"></td>
+                <td><input onclick="if(confirm('Voulez vous?')){document.getElementById('nomCours').value = '@cours.Nom'; this.form.action='/Cours/supprimerCours'; this.form.method='post'; submit();}" type="button" value="Supprimer"></td>
            </tr> }
         </tbody>
      </table>
 
      </form>
+
 
      <br />
     <h3>Ajouter un Cours</h3>

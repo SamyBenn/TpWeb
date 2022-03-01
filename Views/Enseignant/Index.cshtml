@@ -54,6 +54,18 @@ else
     <h3>Liste des Enseignant(s) (@ViewBag.ListeEnseignant.Length Enseignant(s)) :</h3>
     <br>
 
+    <form asp-area="" asp-controller="Enseignant" asp-action="ViderListeEnseignant" method="post">
+        <input type="hidden" name="nomCegep" value="@ViewBag.nomCegep">
+        <input type="hidden" name="nomDepartement" value="@ViewBag.nomDepartement">
+        <input id="vidation" onclick="if(confirm('Voulez vous?')){submit();}" type="button" value="Vider liste Enseignant">
+    </form>
+
+    <script>
+        if(@ViewBag.ListeEnseignant.Length==0){
+            document.getElementById('vidation').style.display = "none";
+        }
+    </script>
+
     <form asp-area="" asp-controller="Enseignant" asp-action="" method="get">
 
     <table>
@@ -71,6 +83,7 @@ else
                 <td>@enseignant.Nom</td>
                 <td>@enseignant.Prenom</td>
                 <td><input onclick="document.getElementById('noEnseignant').value = '@enseignant.NoEmploye'; this.form.action='/Enseignant/FormModifier'; this.form.method='get'; submit();" type="button" value="Modifier"></td>
+                <td><input onclick="if(confirm('vraiment?')){document.getElementById('noEnseignant').value = '@enseignant.NoEmploye'; this.form.action='/Enseignant/SupprimerEnseignant'; this.form.method='post'; submit();}" type="button" value="Supprimer"></td>
         </tr> }
         </tbody>
      </table>

@@ -31,15 +31,27 @@ else
     <br>
     <h3>Liste des département(s) (@ViewBag.ListeDepartements.Length Departement(s)) :</h3>
     <br>
-       
-    <form asp-area="" asp-controller="Departement" asp-action="" method="get">
 
-    <table>
-        <tbody><tr>
+    <form asp-area="" asp-controller="Departement" asp-action="ViderListeDepartement" method="post">
+        <input type="hidden" name="nomCegep" value="@ViewBag.nomCegep">
+        <tr>
             <th>No</th>
             <th>Nom</th>
             <th>Description</th>
         </tr>
+        <input id="vidation" onclick="if(confirm('Voulez vous?')){submit();}" type="button" value="Vider liste Departement">
+    </form>
+
+    <script>
+        if(@ViewBag.ListeDepartements.Length==0){
+            document.getElementById('vidation').style.display = "none";
+        }
+    </script>
+       
+    <form asp-area="" asp-controller="Departement" asp-action="" method="get">
+
+    <table>
+        <tbody>
         <input type="hidden" name="nomCegep" value="@ViewBag.nomCegep">
         <input type="hidden" id="nomDepartement" name="nomDepartement">
         @foreach (DepartementDTO departement in ViewBag.ListeDepartements)
@@ -48,6 +60,7 @@ else
                 <td>@departement.Nom</td>
                 <td>@departement.Description</td>
                 <td><input onclick="document.getElementById('nomDepartement').value = '@departement.Nom'; this.form.action='/Departement/FormModifier'; this.form.method='get'; submit();" type="button" value="Modifier"></td>
+                <td><input onclick="if(confirm('wait, tes sur?')){document.getElementById('nomDepartement').value = '@departement.Nom'; this.form.action='/Departement/SupprimerDepartement'; this.form.method='post'; submit();}" type="button" value="Supprimer"></td>
             </tr> }
         </tbody>
      </table>

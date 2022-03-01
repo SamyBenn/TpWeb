@@ -121,5 +121,35 @@ namespace TpWeb.Controllers
             }
             return RedirectToAction("Index", "Enseignant", new { nomCegep = nomCegep, nomDepartement=nomDepartement });
         }
+
+        [Route("Enseignant/SupprimerEnseignant")]
+        [HttpPost]
+        public IActionResult SupprimerEnseignant([FromForm] string nomCegep, string nomDepartement, int noEnseignant)
+        {
+            try
+            {
+                CegepControleur.Instance.SupprimerEnseignant(nomCegep, nomDepartement, noEnseignant);
+            }
+            catch (Exception e)
+            {
+                ViewBag.MessageErreur = e.Message;
+            }
+            return RedirectToAction("Index", "Enseignant", new { nomCegep = nomCegep, nomDepartement = nomDepartement });
+        }
+
+        [Route("Enseignant/ViderListeEnseignant")]
+        [HttpPost]
+        public IActionResult ViderListeEnseignant([FromForm] string nomCegep, string nomDepartement)
+        {
+            try
+            {
+                CegepControleur.Instance.ViderListeEnseignant(nomCegep, nomDepartement);
+            }
+            catch (Exception e)
+            {
+                ViewBag.MessageErreur = e.Message;
+            }
+            return RedirectToAction("Index", "Enseignant", new { nomCegep = nomCegep, nomDepartement = nomDepartement });
+        }
     }
 }

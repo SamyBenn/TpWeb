@@ -107,5 +107,35 @@ namespace TpWeb.Controllers
             }
             return RedirectToAction("Index");
         }
+
+        [Route("Cegep/SupprimerCegep")]
+        [HttpPost]
+        public IActionResult SupprimerCegep([FromForm] string nomCegep)
+        {
+            try
+            {
+                CegepControleur.Instance.SupprimerCegep(nomCegep);
+            }
+            catch (Exception e)
+            {
+                ViewBag.MessageErreur = e.Message;
+            }
+            return RedirectToAction("Index", "Cegep");
+        }
+
+        [Route("Cegep/ViderListeCegep")]
+        [HttpPost]
+        public IActionResult ViderListeCegep()
+        {
+            try
+            {
+                CegepControleur.Instance.ViderListeCegep();
+            }
+            catch (Exception e)
+            {
+                ViewBag.MessageErreur = e.Message;
+            }
+            return RedirectToAction("Index", "Cegep");
+        }
     }
 }
