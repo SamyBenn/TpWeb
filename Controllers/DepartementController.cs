@@ -110,5 +110,35 @@ namespace TpWeb.Controllers
             }
             return RedirectToAction("Index", "Departement", new { nomCegep = nomCegep });
         }
+
+        [Route("Departement/SupprimerDepartement")]
+        [HttpPost]
+        public IActionResult SupprimerDepartement([FromForm] string nomCegep, string nomDepartement)
+        {
+            try
+            {
+                CegepControleur.Instance.SupprimerDepartement(nomCegep, nomDepartement);
+            }
+            catch (Exception e)
+            {
+                ViewBag.MessageErreur = e.Message;
+            }
+            return RedirectToAction("Index", "Departement", new { nomCegep = nomCegep });
+        }
+
+        [Route("Departement/ViderListeDepartement")]
+        [HttpPost]
+        public IActionResult ViderListeDepartement([FromForm] string nomCegep)
+        {
+            try
+            {
+                CegepControleur.Instance.ViderListeDepartement(nomCegep);
+            }
+            catch (Exception e)
+            {
+                ViewBag.MessageErreur = e.Message;
+            }
+            return RedirectToAction("Index", "Departement", new { nomCegep = nomCegep });
+        }
     }
 }

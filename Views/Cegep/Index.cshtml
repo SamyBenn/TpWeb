@@ -13,19 +13,30 @@ else
     <h3>Liste des cégep(s) (@ViewBag.ListeCegeps.Length Cégep(s)) :</h3>
     <br>
     
+    <form asp-area="" asp-controller="Cegep" asp-action="ViderListeCegep" method="post">
+        <tr>
+            <th>Nom</th>
+            <th>Adresse</th>
+            <th>Ville</th>
+            <th>Province</th>
+            <th>Code Postal</th>
+            <th>Téléphone</th>
+            <th>Courriel</th>
+        </tr>
+        <input id="vidation" onclick="if(confirm('Voulez vous?')){submit();}" type="button" value="Vider liste Cegep">
+    </form>
+
+    <script>
+        if(@ViewBag.ListeCegeps.Length==0){
+            document.getElementById('vidation').style.display = "none";
+        }
+    </script>
+    
     <form asp-area="" asp-controller="Cegep" asp-action="" method="get">
     
     <table>
         <tbody>
-            <tr>
-                <th>Nom</th>
-                <th>Adresse</th>
-                <th>Ville</th>
-                <th>Province</th>
-                <th>Code Postal</th>
-                <th>Téléphone</th>
-                <th>Courriel</th>
-            </tr>
+            
             <input type="hidden" id="nomCegep" name="nomCegep">
             @foreach (CegepDTO cegep in ViewBag.ListeCegeps)
                 {<tr>
@@ -37,6 +48,7 @@ else
                     <td>@cegep.Telephone</td>
                     <td>@cegep.Courriel</td>
                     <td><input onclick="document.getElementById('nomCegep').value = '@cegep.Nom'; this.form.action='/Cegep/FormModifier'; this.form.method='get'; submit();" type="button" value="Modifier"></td>
+                    <td><input onclick="if(confirm('confirmation silvouple')){document.getElementById('nomCegep').value = '@cegep.Nom'; this.form.action='/Cegep/SupprimerCegep'; this.form.method='post'; submit();}" type="button" value="Supprimer"></td>
                 </tr>}
         </tbody>
     </table>
