@@ -11,6 +11,8 @@ namespace TpWeb
 {
     public class Program
     {
+        public static string HOST = "localhost";
+        public static int PORT = 5000;
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();

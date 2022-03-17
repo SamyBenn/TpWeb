@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Json;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using TpWeb.Logics.Controleurs;
 using TpWeb.Models;
+using TpWeb.Utils;
 
 /// <summary>
 /// Namespace pour les controleurs de vue.
@@ -23,12 +28,14 @@ namespace TpWeb.Controllers
         [Route("Cegep")]
         [Route("Cegep/Index")]
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             try
             {
                 //Préparation des données pour la vue...
-                ViewBag.ListeCegeps = CegepControleur.Instance.ObtenirListeCegep().ToArray();
+                //ViewBag.ListeCegeps = CegepControleur.Instance.ObtenirListeCegep().ToArray();
+                JsonValue jsonResponse = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Cegep/obtenirListeCegep");
+                ViewBag.ListeCegeps = JsonConvert.DeserializeObject<List<CegepDTO>>(jsonResponse.ToString()).ToArray();
             }
             catch (Exception e)
             {
@@ -48,11 +55,11 @@ namespace TpWeb.Controllers
         /// <returns>ActionResult suite aux traitements des données.</returns>
         [Route("Cegep/AjouterCegep")]
         [HttpPost]
-        public IActionResult AjouterCegep([FromForm] CegepDTO cegep)
+        public async Task<IActionResult> AjouterCegep([FromForm] CegepDTO cegep)
         {
             try
             {
-               CegepControleur.Instance.AjouterCegep(cegep);
+                await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/Cegep/AjouterCegep", cegep);
             }
             catch (Exception e)
             {
@@ -71,18 +78,21 @@ namespace TpWeb.Controllers
         /// <returns></returns>
         [Route("Cegep/FormModifier")]
         [HttpGet]
-        public IActionResult FormModifier([FromQuery] string nomCegep)
+        public async Task<IActionResult> FormModifier([FromQuery] string nomCegep)
         {
-            CegepDTO cegep = new CegepDTO();
             try
             {
-                cegep = CegepControleur.Instance.ObtenirCegep(nomCegep);
+                if (TempData["MessageErreur"] != null)
+                    ViewBag.MessageErreur = TempData["MessageErreur"];
+                JsonValue jsonResponse = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Cegep/ObtenirCegep?nomCegep=" + nomCegep);
+                CegepDTO cegep = JsonConvert.DeserializeObject<CegepDTO>(jsonResponse.ToString());
+                return View(cegep);
             }
             catch (Exception e)
             {
                 ViewBag.MessageErreur = e.Message;
             }
-            return View(cegep);
+            return RedirectToAction("Index");
         }
 
 
@@ -95,11 +105,11 @@ namespace TpWeb.Controllers
         /// <returns></returns>
         [Route("Cegep/ModifierCegep")]
         [HttpPost]
-        public  IActionResult ModifierCegep([FromForm] CegepDTO cegep)
+        public async Task<IActionResult> ModifierCegep([FromForm] CegepDTO cegep)
         {
             try
             {
-                CegepControleur.Instance.ModifierCegep(cegep);
+                await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/Cegep/ModifierCegep", cegep);
             }
             catch (Exception e)
             {
@@ -110,11 +120,11 @@ namespace TpWeb.Controllers
 
         [Route("Cegep/SupprimerCegep")]
         [HttpPost]
-        public IActionResult SupprimerCegep([FromForm] string nomCegep)
+        public async Task<IActionResult> SupprimerCegep([FromForm] string nomCegep)
         {
             try
             {
-                CegepControleur.Instance.SupprimerCegep(nomCegep);
+                await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/Cegep/SupprimerCegep?nomCegep=" + nomCegep, null);
             }
             catch (Exception e)
             {
@@ -125,11 +135,11 @@ namespace TpWeb.Controllers
 
         [Route("Cegep/ViderListeCegep")]
         [HttpPost]
-        public IActionResult ViderListeCegep()
+        public async Task<IActionResult> ViderListeCegep()
         {
             try
             {
-                CegepControleur.Instance.ViderListeCegep();
+                await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/Cegep/ViderListeCegep", null);
             }
             catch (Exception e)
             {

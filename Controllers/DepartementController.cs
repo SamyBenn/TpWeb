@@ -1,7 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Json;
+using System.Threading.Tasks;
 using TpWeb.Logics.Controleurs;
 using TpWeb.Models;
+using TpWeb.Utils;
 
 namespace TpWeb.Controllers
 {
@@ -17,17 +22,20 @@ namespace TpWeb.Controllers
         [Route("Departement")]
         [Route("Departement/Index")]
         [HttpGet]
-        public IActionResult Index([FromQuery] string nomCegep)
+        public async Task<IActionResult> Index([FromQuery] string nomCegep)
         {
             try
             {
-                ViewBag.ListeCegeps = CegepControleur.Instance.ObtenirListeCegep().ToArray();
+                JsonValue jsonListeCegeps = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Cegep/obtenirListeCegep");
+                List<CegepDTO> listeCegeps = new(JsonConvert.DeserializeObject<List<CegepDTO>>(jsonListeCegeps.ToString()).ToArray());
+                ViewBag.ListeCegeps = listeCegeps;
                 if (nomCegep is null)
                 {
-                    nomCegep = CegepControleur.Instance.ObtenirListeCegep()[0].Nom;
+                    nomCegep = listeCegeps[0].Nom;
                 }
                 ViewBag.nomCegep = nomCegep;
-                ViewBag.ListeDepartements = CegepControleur.Instance.ObtenirListeDepartement(nomCegep).ToArray();
+                JsonValue jsonListeDep = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Departement/obtenirListeDepartement?nomCegep="+nomCegep);
+                ViewBag.ListeDepartements = JsonConvert.DeserializeObject<List<DepartementDTO>>(jsonListeDep.ToString()).ToArray();
             }
             catch (Exception e)
             {
@@ -47,11 +55,11 @@ namespace TpWeb.Controllers
         /// <returns></returns>
         [Route("Departement/AjouterDepartement")]
         [HttpPost]
-        public IActionResult AjouterDepartement([FromForm]string nomCegep, DepartementDTO departement)
+        public async Task<IActionResult> AjouterDepartement([FromForm]string nomCegep, DepartementDTO departement)
         {
             try
             {
-                CegepControleur.Instance.AjouterDepartement(nomCegep, departement);
+                await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/Departement/AjouterDepartement?nomCegep=" + nomCegep, departement);
             }
             catch (Exception e)
             {
@@ -71,19 +79,21 @@ namespace TpWeb.Controllers
         /// <returns></returns>
         [Route("Departement/FormModifier")]
         [HttpGet]
-        public IActionResult FormModifier([FromQuery] string nomCegep, string nomDepartement)
+        public async Task<IActionResult> FormModifier([FromQuery] string nomCegep, string nomDepartement)
         {
-            DepartementDTO departement = new DepartementDTO(); ;
             try
             {
-                departement = CegepControleur.Instance.ObtenirDepartement(nomCegep, nomDepartement);
+                //departement = CegepControleur.Instance.ObtenirDepartement(nomCegep, nomDepartement);
                 ViewBag.nomCegep = nomCegep;
+                JsonValue jsonResponse = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Departement/obtenirDepartement?nomcegep=" + nomCegep + "&nomDepartement=" + nomDepartement);
+                DepartementDTO departement = JsonConvert.DeserializeObject<DepartementDTO>(jsonResponse.ToString());
+                return View(departement);
             }
             catch (Exception e)
             {
                 ViewBag.MessageErreur = e.Message;
             }
-            return View(departement);
+            return RedirectToAction("Index");
         }
 
 
@@ -98,11 +108,11 @@ namespace TpWeb.Controllers
         /// <returns></returns>
         [Route("Departement/ModifierDepartement")]
         [HttpPost]
-        public IActionResult ModifierDepartement([FromForm] string nomCegep, DepartementDTO departement)
+        public async Task<IActionResult> ModifierDepartement([FromForm] string nomCegep, DepartementDTO departement)
         {
             try
             {
-                CegepControleur.Instance.ModifierDepartement(nomCegep, departement);
+                await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/Departement/modifierDepartement?nomCegep=" + nomCegep, departement);
             }
             catch (Exception e)
             {
@@ -113,11 +123,11 @@ namespace TpWeb.Controllers
 
         [Route("Departement/SupprimerDepartement")]
         [HttpPost]
-        public IActionResult SupprimerDepartement([FromForm] string nomCegep, string nomDepartement)
+        public async Task<IActionResult> SupprimerDepartement([FromForm] string nomCegep, string nomDepartement)
         {
             try
             {
-                CegepControleur.Instance.SupprimerDepartement(nomCegep, nomDepartement);
+                await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/Departement/supprimerDepartement?nomCegep=" + nomCegep + "&nomDepartement=" + nomDepartement, null);
             }
             catch (Exception e)
             {
@@ -128,11 +138,11 @@ namespace TpWeb.Controllers
 
         [Route("Departement/ViderListeDepartement")]
         [HttpPost]
-        public IActionResult ViderListeDepartement([FromForm] string nomCegep)
+        public async Task<IActionResult> ViderListeDepartement([FromForm] string nomCegep)
         {
             try
             {
-                CegepControleur.Instance.ViderListeDepartement(nomCegep);
+                await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/Departement/viderListeDepartement?nomCegep=" + nomCegep, null);
             }
             catch (Exception e)
             {

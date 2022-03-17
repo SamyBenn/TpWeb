@@ -1,8 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Json;
+using System.Threading.Tasks;
 using TpWeb.Logics.Controleurs;
 using TpWeb.Models;
+using TpWeb.Utils;
 
 namespace TpWeb.Controllers
 {
@@ -19,24 +24,29 @@ namespace TpWeb.Controllers
         [Route("Cours")]
         [Route("Cours/Index")]
         [HttpGet]
-        public IActionResult Index([FromQuery] string nomCegep, string nomDepartement)
+        public async Task<IActionResult> Index([FromQuery] string nomCegep, string nomDepartement)
         {
             try
             {
-                ViewBag.ListeCegeps = CegepControleur.Instance.ObtenirListeCegep().ToArray();
+                JsonValue jsonListeCegeps = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Cegep/obtenirListeCegep");
+                List<CegepDTO> listeCegeps = new(JsonConvert.DeserializeObject<List<CegepDTO>>(jsonListeCegeps.ToString()).ToArray());
+                ViewBag.ListeCegeps = listeCegeps;
                 if (nomCegep is null)
                 {
-                    nomCegep = CegepControleur.Instance.ObtenirListeCegep()[0].Nom;
+                    nomCegep = listeCegeps[0].Nom;
                 }
                 ViewBag.nomCegep = nomCegep;
-                ViewBag.ListeDepartements = CegepControleur.Instance.ObtenirListeDepartement(nomCegep).ToArray();
-                
+
+                JsonValue jsonListeDepartements = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Departement/obtenirListeDepartement?nomCegep=" + nomCegep);
+                List<DepartementDTO> listeDepartements = new(JsonConvert.DeserializeObject<List<DepartementDTO>>(jsonListeDepartements.ToString()).ToArray());
+                ViewBag.ListeDepartements = listeDepartements;
                 if (nomDepartement is null)
                 {
-                    nomDepartement = CegepControleur.Instance.ObtenirListeDepartement(nomCegep)[0].Nom;
+                    nomDepartement = listeDepartements[0].Nom;
                 }
                 ViewBag.nomDepartement = nomDepartement;
-                ViewBag.ListeCours = CegepControleur.Instance.ObtenirListeCours(nomCegep, nomDepartement).ToArray();
+                JsonValue jsonListeCours = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Cours/obtenirListeCours?nomCegep=" + nomCegep + "&nomDepartement=" + nomDepartement);
+                ViewBag.ListeCours = JsonConvert.DeserializeObject<List<CoursDTO>>(jsonListeCours.ToString()).ToArray();
 
             }
             catch (Exception e)
@@ -58,11 +68,11 @@ namespace TpWeb.Controllers
         /// <returns></returns>
         [Route("Cours/AjouterCours")]
         [HttpPost]
-        public IActionResult AjouterCours([FromForm]string nomCegep, string nomDepartement, CoursDTO cours)
+        public async Task<IActionResult> AjouterCours([FromForm]string nomCegep, string nomDepartement, CoursDTO cours)
         {
             try
             {
-                CegepControleur.Instance.AjouterCours(nomCegep, nomDepartement, cours);
+                await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/Cours/ajouterCours?nomCegep=" + nomCegep + "&nomDepartement=" + nomDepartement, cours);
             }
             catch (Exception e)
             {
@@ -83,12 +93,13 @@ namespace TpWeb.Controllers
         /// <returns></returns>
         [Route("Cours/FormModifier")]
         [HttpGet]
-        public IActionResult FormModifier([FromQuery] string nomCegep, string nomDepartement, string nomCours)
+        public async Task<IActionResult> FormModifier([FromQuery] string nomCegep, string nomDepartement, string nomCours)
         {
             CoursDTO cours = new CoursDTO(); ;
             try
             {
-                cours = CegepControleur.Instance.ObtenirCours(nomCegep, nomDepartement, nomCours);
+                JsonValue jsonCours = await WebAPI.Instance.ExecuteGetAsync("http://" + Program.HOST + ":" + Program.PORT + "/Cours/obtenirCours?nomCegep=" + nomCegep + "&nomDepartement=" + nomDepartement + "&nomCours=" + nomCours);
+                cours = JsonConvert.DeserializeObject<CoursDTO>(jsonCours.ToString());
                 ViewBag.nomCegep = nomCegep;
                 ViewBag.nomDepartement = nomDepartement;
             }
@@ -111,11 +122,11 @@ namespace TpWeb.Controllers
         /// <returns></returns>
         [Route("Cours/ModifierCours")]
         [HttpPost]
-        public IActionResult ModifierCours([FromForm] string nomCegep, string nomDepartement, CoursDTO cours)
+        public async Task<IActionResult> ModifierCours([FromForm] string nomCegep, string nomDepartement, CoursDTO cours)
         {
             try
             {
-                CegepControleur.Instance.ModifierCours(nomCegep, nomDepartement, cours);
+                await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/Cours/modifierCours?nomCegep=" + nomCegep + "&nomDepartement=" + nomDepartement, cours);
             }
             catch (Exception e)
             {
@@ -127,11 +138,11 @@ namespace TpWeb.Controllers
 
         [Route("Cours/SupprimerCours")]
         [HttpPost]
-        public IActionResult SupprimerCours([FromForm] string nomCegep, string nomDepartement, string nomCours)
+        public async Task<IActionResult> SupprimerCours([FromForm] string nomCegep, string nomDepartement, string nomCours)
         {
             try
             {
-                CegepControleur.Instance.SupprimerCours(nomCegep, nomDepartement, nomCours);
+                await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/Cours/supprimerCours?nomCegep=" + nomCegep + "&nomDepartement=" + nomDepartement + "&nomCours=" + nomCours, null);
             }
             catch (Exception e)
             {
@@ -142,11 +153,11 @@ namespace TpWeb.Controllers
 
         [Route("Cours/ViderListeCours")]
         [HttpPost]
-        public IActionResult ViderListeCours([FromForm] string nomCegep, string nomDepartement)
+        public async Task<IActionResult> ViderListeCours([FromForm] string nomCegep, string nomDepartement)
         {
             try
             {
-                CegepControleur.Instance.ViderListeCours(nomCegep, nomDepartement);
+                await WebAPI.Instance.PostAsync("http://" + Program.HOST + ":" + Program.PORT + "/Cours/viderListeCours?nomCegep=" + nomCegep + "&nomDepartement=" + nomDepartement, null);
             }
             catch (Exception e)
             {
